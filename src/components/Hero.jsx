@@ -4,23 +4,30 @@ import { ChevronDown } from "lucide-react";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-darker">
-      {/* Background Image */}
-      <div className="absolute inset-0 w-full h-full">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            // 🔹 Use your local image here
-            backgroundImage: "url('/hero-bg.jpg')",
-          }}
-        ></div>
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          poster="/hero-poster.jpg"
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
+        {/* Lighter Dark Overlay - Video shows through clearly */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
+
+        {/* Subtle dark layer for text contrast */}
+        <div className="absolute inset-0 bg-darker/20"></div>
       </div>
 
-      {/* Lighting Effects - Changed to Purple/Violet */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl mix-blend-screen"></div>
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl mix-blend-screen"></div>
+      {/* Lighting Effects - Purple/Violet */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl mix-blend-screen animate-pulse"></div>
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl mix-blend-screen animate-pulse delay-1000"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-7xl mx-auto pt-20">
@@ -29,7 +36,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-primary tracking-[0.35em] text-xs sm:text-sm md:text-base mb-6 font-semibold uppercase"
+          className="text-primary tracking-[0.35em] text-xs sm:text-sm md:text-base mb-6 font-semibold uppercase drop-shadow-lg"
         >
           THE SOUND THAT MOVES YOU
         </motion.p>
@@ -66,7 +73,7 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="mt-16"
         >
-          <ChevronDown className="w-10 h-10 text-primary animate-bounce mx-auto" />
+          <ChevronDown className="w-10 h-10 text-primary animate-bounce mx-auto drop-shadow-lg" />
         </motion.div>
       </div>
     </section>
