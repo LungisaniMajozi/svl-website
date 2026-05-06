@@ -16,34 +16,36 @@ export const CartProvider = ({ children }) => {
 
   // Add item to cart
   const addToCart = (product) => {
+    const cartId = `${product.id}-${product.size ?? "One Size"}`;
+
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.cartId === cartId);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
+          item.cartId === cartId
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...product, quantity: 1, cartId }];
     });
     setIsCartOpen(true);
   };
 
   // Remove item from cart
-  const removeFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = (cartId) => {
+    setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
   };
 
   // Update quantity
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = (cartId, quantity) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(cartId);
       return;
     }
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity } : item,
+        item.cartId === cartId ? { ...item, quantity } : item,
       ),
     );
   };
@@ -72,6 +74,9 @@ export const CartProvider = ({ children }) => {
 
     cartItems.forEach((item, index) => {
       message += `${index + 1}. *${item.name}*\n`;
+      if (item.size) {
+        message += `   Size: ${item.size}\n`;
+      }
       message += `   Qty: ${item.quantity} × R${item.price}\n`;
       message += `   Subtotal: R${item.price * item.quantity}\n`;
 

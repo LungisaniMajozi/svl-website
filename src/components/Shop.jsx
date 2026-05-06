@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { ShoppingBag, Star } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
@@ -11,6 +12,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT BLACK",
       price: 549.99,
       image: "/shop/Shop-1.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Apparel",
       rating: 5,
     },
@@ -19,6 +21,7 @@ const Shop = () => {
       name: "SLEEZY BLACK HOODIE",
       price: 599.99,
       image: "/shop/Shop-2.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Apparel",
       rating: 5,
     },
@@ -27,6 +30,7 @@ const Shop = () => {
       name: "BUCKET HAT",
       price: 299.99,
       image: "/shop/Shop-3.jpeg",
+      sizes: ["One Size"],
       category: "Music",
       rating: 5,
     },
@@ -35,6 +39,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT",
       price: 499.99,
       image: "/shop/Shop-4.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Apparel",
       rating: 5,
     },
@@ -43,6 +48,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT PINK",
       price: 499.99,
       image: "/shop/Shop 5.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Apparel",
       rating: 5,
     },
@@ -51,6 +57,7 @@ const Shop = () => {
       name: "SLEEZY HOODIE BLACK B",
       price: 599.99,
       image: "/shop/Shop-6.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Apparel",
       rating: 4,
     },
@@ -59,6 +66,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT BLACK B",
       price: 549.99,
       image: "/shop/Shop-7.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Accessories",
       rating: 5,
     },
@@ -68,6 +76,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT NAVY",
       price: 549.99,
       image: "/shop/Shop-9.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Accessories",
       rating: 4,
     },
@@ -76,6 +85,7 @@ const Shop = () => {
       name: "SLEEZY SHORTS ",
       price: 399.99,
       image: "/shop/Shop-10.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Collectibles",
       rating: 5,
     },
@@ -84,6 +94,7 @@ const Shop = () => {
       name: "BEAT GOES ON T-SHIRT",
       price: 499.99,
       image: "/shop/Shop-11.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Collectibles",
       rating: 5,
     },
@@ -92,6 +103,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT WHITE",
       price: 499.99,
       image: "/shop/Shop-12.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Collectibles",
       rating: 5,
     },
@@ -100,6 +112,7 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT KIDS",
       price: 249.99,
       image: "/shop/Shop-14.jpeg",
+      sizes: ["XS", "S", "M"],
       category: "Collectibles",
       rating: 5,
     },
@@ -108,10 +121,17 @@ const Shop = () => {
       name: "SLEEZY T-SHIRT WHITE",
       price: 499.99,
       image: "/shop/Shop-15.jpeg",
+      sizes: ["S", "M", "L", "XL"],
       category: "Collectibles",
       rating: 5,
     },
   ];
+
+  const [selectedSizes, setSelectedSizes] = useState(() =>
+    Object.fromEntries(
+      products.map((product) => [product.id, product.sizes?.[0] ?? "One Size"]),
+    ),
+  );
 
   return (
     <section
@@ -166,7 +186,15 @@ const Shop = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-4 left-4 right-4">
                     <button
-                      onClick={() => addToCart(product)}
+                      onClick={() =>
+                        addToCart({
+                          ...product,
+                          size:
+                            selectedSizes[product.id] ||
+                            product.sizes?.[0] ||
+                            "One Size",
+                        })
+                      }
                       className="w-full btn-primary py-3 text-sm flex items-center justify-center gap-2"
                     >
                       <ShoppingBag className="w-4 h-4" />
@@ -197,6 +225,30 @@ const Shop = () => {
                 <h4 className="text-lg font-bold text-white mb-2 truncate">
                   {product.name}
                 </h4>
+
+                {product.sizes && product.sizes.length > 0 && (
+                  <div className="mb-4">
+                    <label className="block text-xs uppercase tracking-[0.22em] text-gray-400 mb-2">
+                      Size
+                    </label>
+                    <select
+                      value={selectedSizes[product.id]}
+                      onChange={(e) =>
+                        setSelectedSizes((prev) => ({
+                          ...prev,
+                          [product.id]: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-2xl bg-white/5 border border-white/10 text-white px-3 py-2 focus:outline-none focus:border-primary"
+                    >
+                      {product.sizes.map((size) => (
+                        <option key={size} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 {/* Price */}
                 <div className="flex items-center justify-between">
